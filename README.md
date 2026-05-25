@@ -1,6 +1,12 @@
 # NRK Catering Website
 
-Production-ready one-page business website for a Tamil Nadu catering service.
+A production-ready premium one-page business website for **NRK Catering**, a Tamil Nadu-based catering service specializing in weddings, family functions, corporate events, traditional banana leaf dining, and large-scale celebrations.
+
+## Overview
+
+This website is built as a polished client-facing landing page with a strong focus on visual presentation, mobile responsiveness, real event media, WhatsApp enquiry flow, and easy future content updates.
+
+The site is designed to help NRK Catering present its services professionally and share a live website link with clients for enquiries, feedback, and bookings.
 
 ## Tech Stack
 
@@ -8,50 +14,52 @@ Production-ready one-page business website for a Tamil Nadu catering service.
 - React
 - TypeScript
 - Tailwind CSS
-- shadcn/ui components
+- shadcn/ui style components
+- Lucide React icons
+- Local video and image assets
+- WhatsApp enquiry integration
+
+## Main Features
+
+- Premium hero section with strong brand positioning
+- About section highlighting legacy and catering experience
+- Service sections for family, corporate, wedding, and social events
+- Special dining and festival service section
+- Real event gallery with local videos and images
+- Auto-scrolling testimonial section with real Instagram previews
+- Premium “Why Choose Us” trust section with branded illustrations
+- WhatsApp enquiry contact form
+- Responsive mobile-first layout
+- Footer with business contact details and social links
+- Ready for Vercel deployment
 
 ## Main Sections
 
-- Premium hero section with WhatsApp CTA
-- About / legacy section
-- Catering services
-- Dining styles and menu packages
-- Gallery with filter and lightbox
+- Hero
+- About / Legacy
+- Services
+- Special Services
+- Dining Packages
+- Gallery
 - Testimonials
-- Why choose us
-- WhatsApp enquiry contact form
-- Mobile-friendly navigation and layout
+- Why Choose Us
+- Contact
+- Footer
 
-## Edit Business Details
+## Project Structure
 
-Update business contact details in:
-
-```ts
-src/config/business.ts
-```
-
-Important placeholders to replace before going live:
-
-- Phone number
-- WhatsApp number
-- Email
-- Real address
-- Instagram link, if needed
-
-## Development
-
-```bash
-npm install
-npm run dev
-```
-
-## Production Build
-
-```bash
-npm run build
-npm run preview
-```
-
-## Deployment
-
-This project is ready for Vercel, Netlify, or any static hosting provider. Upload the repository or deploy the generated `dist` folder after running `npm run build`.
+```txt
+src/
+  assets/
+    gallery/
+    ...
+  components/
+  config/
+    business.ts
+  hooks/
+  pages/
+public/
+index.html
+package.json
+vite.config.ts
+tailwind.config.ts
