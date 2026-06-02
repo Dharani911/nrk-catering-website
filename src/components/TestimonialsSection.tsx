@@ -176,8 +176,9 @@ export default function TestimonialsSection() {
                               src={`${reelUrl}embed`}
                               title={`${item.title} Instagram preview`}
                               className="h-full w-full border-0 bg-white"
-                              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                              allow="autoplay; encrypted-media; picture-in-picture; web-share"
                               loading="lazy"
+                              referrerPolicy="strict-origin-when-cross-origin"
                             />
                           </div>
                         </div>

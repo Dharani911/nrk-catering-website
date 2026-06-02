@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   useScrollReveal,
   useScrollProgress,
@@ -87,7 +87,7 @@ export default function GallerySection() {
   const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
-
+const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
   const categories = [
     "All",
     ...Array.from(new Set(items.map((item) => item.category))),
@@ -99,8 +99,8 @@ export default function GallerySection() {
   const activeItem = filtered[activeIndex] ?? filtered[0];
 
   useEffect(() => {
+    stopCurrentVideo();
     setActiveIndex(0);
-    setPlayingIndex(null);
   }, [filter]);
 
   useEffect(() => {
@@ -132,26 +132,68 @@ export default function GallerySection() {
   }, [filtered.length, playingIndex]);
 
   const getOriginalIndex = (item: GalleryItem) => items.indexOf(item);
+const pauseAllVideos = (exceptSrc?: string) => {
+  Object.entries(videoRefs.current).forEach(([src, video]) => {
+    if (!video || src === exceptSrc) return;
 
-  const goToPrevious = () => {
+    video.pause();
+    video.currentTime = 0;
+  });
+};
+
+const stopCurrentVideo = () => {
+  pauseAllVideos();
+  setPlayingIndex(null);
+};
+
+const toggleVideo = (item: GalleryItem, index: number, isActive: boolean) => {
+  if (!isActive) {
+    stopCurrentVideo();
+    setActiveIndex(index);
+    return;
+  }
+
+  const video = videoRefs.current[item.src];
+
+  if (!video) return;
+
+  if (playingIndex === index && !video.paused) {
+    video.pause();
     setPlayingIndex(null);
+    return;
+  }
+
+  pauseAllVideos(item.src);
+  setPlayingIndex(index);
+
+  const playPromise = video.play();
+
+  if (playPromise !== undefined) {
+    playPromise.catch(() => {
+      setPlayingIndex(null);
+    });
+  }
+};
+  const goToPrevious = () => {
+    stopCurrentVideo();
+
     setActiveIndex((current) =>
       current === 0 ? filtered.length - 1 : current - 1
     );
   };
 
   const goToNext = () => {
-    setPlayingIndex(null);
+    stopCurrentVideo();
+
     setActiveIndex((current) =>
       current === filtered.length - 1 ? 0 : current + 1
     );
   };
 
   const openLightbox = (item: GalleryItem) => {
-    setPlayingIndex(null);
+    stopCurrentVideo();
     setLightbox(getOriginalIndex(item));
   };
-
   const navigateLightbox = (direction: number) => {
     if (lightbox === null) return;
 
@@ -221,17 +263,12 @@ export default function GallerySection() {
                   playingIndex === index && item.type === "video";
 
                 const translateX = isDesktop ? offset * 360 : offset * 132;
-                const translateZ = isActive
-                  ? isDesktop
-                    ? 230
-                    : 150
-                  : -absOffset * 135;
-                const rotateY = offset * -32;
+                const translateZ = isActive ? 0 : -absOffset * 120;
+                const rotateY = isActive ? 0 : offset * -30;
+
                 const scale = isActive
-                  ? isDesktop
-                    ? 1.08
-                    : 1
-                  : 1 - absOffset * 0.14;
+                  ? 1
+                  : 1 - absOffset * (isDesktop ? 0.12 : 0.1);
                 const opacity = isVisible ? 1 - absOffset * 0.22 : 0;
                 const zIndex = 40 - absOffset;
 
@@ -240,10 +277,13 @@ export default function GallerySection() {
                     key={item.alt}
                     className="absolute left-1/2 top-1/2 h-[430px] w-[280px] overflow-hidden rounded-[2rem] border border-brand-gold/20 bg-card shadow-[0_26px_70px_rgba(0,0,0,0.22)] transition-all duration-700 ease-out sm:h-[480px] sm:w-[320px] lg:h-[620px] lg:w-[430px] lg:rounded-[2.4rem] lg:shadow-[0_34px_95px_rgba(0,0,0,0.26)]"
                     style={{
-                      transform: `translate(-50%, -50%) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
+                      transform: `translate3d(-50%, -50%, 0) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
                       opacity,
                       zIndex,
                       pointerEvents: isVisible ? "auto" : "none",
+                      backfaceVisibility: "hidden",
+                      WebkitBackfaceVisibility: "hidden",
+                      transformStyle: "preserve-3d",
                     }}
                   >
                     <div className="relative h-full w-full bg-black">
@@ -251,32 +291,28 @@ export default function GallerySection() {
                         <>
                           <video
                             key={item.src}
+                            ref={(node) => {
+                              videoRefs.current[item.src] = node;
+                            }}
                             src={item.src}
                             poster={item.poster}
                             className="h-full w-full object-cover"
-                            controls={isPlaying}
+                            controls={false}
                             playsInline
                             preload="metadata"
-                            autoPlay={isPlaying}
+                            onEnded={() => setPlayingIndex(null)}
+                            onClick={() => toggleVideo(item, index, isActive)}
                           />
 
                           {!isPlaying && (
                             <button
                               type="button"
-                              onClick={() => {
-                                if (!isActive) {
-                                  setPlayingIndex(null);
-                                  setActiveIndex(index);
-                                  return;
-                                }
-
-                                setPlayingIndex(index);
-                              }}
+                              onClick={() => toggleVideo(item, index, isActive)}
                               className="absolute inset-0 flex items-center justify-center bg-black/25"
                               aria-label="Play gallery video"
                             >
                               <span className="flex h-20 w-20 items-center justify-center rounded-full bg-white/20 text-brand-gold backdrop-blur-md ring-1 ring-white/35 transition hover:scale-105 hover:bg-brand-gold hover:text-brand-green-dark lg:h-24 lg:w-24">
-                                <PlayCircle className="h-11 w-11 lg:h-13 lg:w-13" />
+                                <PlayCircle className="h-11 w-11 lg:h-14 lg:w-14" />
                               </span>
                             </button>
                           )}
@@ -284,8 +320,8 @@ export default function GallerySection() {
                           {isPlaying && (
                             <button
                               type="button"
-                              onClick={() => setPlayingIndex(null)}
-                              className="absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/35 text-brand-gold backdrop-blur-md"
+                              onClick={() => toggleVideo(item, index, isActive)}
+                              className="absolute right-3 top-3 z-20 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/45 text-brand-gold shadow-lg backdrop-blur-md transition hover:bg-brand-gold hover:text-brand-green-dark"
                               aria-label="Pause gallery video"
                             >
                               <PauseCircle className="h-6 w-6" />

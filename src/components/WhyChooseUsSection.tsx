@@ -21,7 +21,7 @@ const reasons = [
   {
     icon: HeartHandshake,
     title: "Guest-First Hospitality",
-    desc: "Every guest is served with warmth, respect, and the attention expected at Tamil celebrations.",
+    desc: "Every guest is served with warmth, respect, and the attention expected at the celebrations.",
   },
   {
     icon: Award,

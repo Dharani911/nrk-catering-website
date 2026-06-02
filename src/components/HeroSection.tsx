@@ -31,6 +31,7 @@ const services = [
 
 export default function HeroSection() {
   const [active, setActive] = useState<string | null>(null);
+  const [isServiceHovering, setIsServiceHovering] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
 
@@ -53,6 +54,8 @@ export default function HeroSection() {
   }, []);
 
   useEffect(() => {
+    if (isServiceHovering) return;
+
     const sequence: Array<string | null> = [
       "family",
       "corporate",
@@ -60,23 +63,18 @@ export default function HeroSection() {
       null,
     ];
 
-    const durations = [3000, 3000, 3000, 2500];
-    let index = 0;
-    let timeoutId: number;
+    const currentIndex = sequence.indexOf(active);
+    const nextIndex =
+      currentIndex === -1 || currentIndex === sequence.length - 1
+        ? 0
+        : currentIndex + 1;
 
-    const runSequence = () => {
-      setActive(sequence[index]);
-
-      timeoutId = window.setTimeout(() => {
-        index = (index + 1) % sequence.length;
-        runSequence();
-      }, durations[index]);
-    };
-
-    runSequence();
+    const timeoutId = window.setTimeout(() => {
+      setActive(sequence[nextIndex]);
+    }, active === null ? 2500 : 3000);
 
     return () => window.clearTimeout(timeoutId);
-  }, []);
+  }, [active, isServiceHovering]);
 
   const parallaxBg = scrollY * 0.4;
   const contentOpacity = Math.max(0, 1 - scrollY / 600);
@@ -160,28 +158,29 @@ export default function HeroSection() {
           }px, 0)`,
         }}
       >
-        <div className="mb-1 animate-fade-in sm:mb-2">
-          <img
-            src={nrkLogo}
-            alt="NRK Catering Logo"
-            className="mx-auto h-32 w-auto animate-float sm:h-40 md:h-48 lg:h-56 xl:h-64"
-            style={{
-              filter:
-                "drop-shadow(0 0 2px rgba(255,245,210,0.75)) drop-shadow(0 0 7px rgba(255,226,150,0.38)) drop-shadow(0 2px 7px rgba(0,0,0,0.78)) drop-shadow(0 8px 20px rgba(0,0,0,0.62))",
-            }}
-          />
+        <div className="mb-5 animate-fade-in sm:mb-6">
+          <div className="relative mx-auto flex w-fit items-center justify-center">
+            {/* soft glow only, no background box */}
+            <div className="pointer-events-none absolute inset-0 scale-125 rounded-full bg-brand-gold/20 blur-3xl" />
+
+            <img
+              src={nrkLogo}
+              alt="NRK Catering Logo"
+              className="relative z-10 h-auto w-[160px] object-contain brightness-110 contrast-110 drop-shadow-[0_12px_34px_rgba(0,0,0,0.55)] sm:w-[220px] md:w-[270px] lg:w-[320px] xl:w-[360px]"
+            />
+          </div>
         </div>
 
-        <div className="-mt-7 sm:-mt-8 md:-mt-10 lg:-mt-12">
+        <div className="-mt-1 sm:-mt-2 md:-mt-3">
           <p
-            className="mb-2 animate-slide-up text-sm font-semibold uppercase tracking-[0.28em]"
+            className="mb-2 animate-slide-up text-sm font-semibold uppercase tracking-[0.28em] drop-shadow-sm"
             style={{ color: "hsl(33, 70%, 65%)" }}
           >
             Premium Catering Excellence
           </p>
 
           <h1
-            className="animate-slide-up font-heading text-4xl font-bold leading-tight md:text-6xl lg:text-7xl"
+            className="animate-slide-up font-heading text-4xl font-bold leading-tight drop-shadow-md md:text-6xl lg:text-7xl"
             style={{ color: "hsl(60, 20%, 97%)" }}
           >
             NRK Catering
@@ -195,8 +194,7 @@ export default function HeroSection() {
             animationDelay: "0.2s",
           }}
         >
-          Traditional Tamil taste, premium presentation, and warm hospitality
-          for memorable celebrations.
+          Discover the small touches that will make your celebrations big!
         </p>
 
         {/* Service transition cards */}
@@ -209,9 +207,22 @@ export default function HeroSection() {
               <button
                 key={service.id}
                 onClick={() => setActive(active === service.id ? null : service.id)}
-                onMouseEnter={() => setActive(service.id)}
+                onMouseEnter={() => {
+                  setIsServiceHovering(true);
+                  setActive(service.id);
+                }}
+                onMouseLeave={() => {
+                  setIsServiceHovering(false);
+                }}
+                onFocus={() => {
+                  setIsServiceHovering(true);
+                  setActive(service.id);
+                }}
+                onBlur={() => {
+                  setIsServiceHovering(false);
+                }}
                 className={`group relative min-h-[96px] overflow-hidden rounded-2xl border px-2 py-3 text-center transition-all duration-500 sm:min-h-[118px] sm:px-5 sm:py-5 ${
-                  index === 1 ? "mt-12 sm:mt-0" : "mt-0"
+                 index === 1 ? "mt-12 sm:mt-0" : "mt-0"
                 } ${
                   active === service.id
                     ? "scale-[1.02] border-brand-gold/70 shadow-2xl"

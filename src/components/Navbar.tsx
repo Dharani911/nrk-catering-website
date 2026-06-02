@@ -22,14 +22,40 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${scrolled || mobileOpen ? "bg-background/95 py-3 shadow-md backdrop-blur-md" : "bg-transparent py-4 sm:py-5"}`}>
+    <nav
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
+        scrolled || mobileOpen
+          ? "bg-background/95 py-2 shadow-md backdrop-blur-md"
+          : "bg-transparent py-3"
+      }`}
+    >
       <div className="container mx-auto flex items-center justify-between px-4">
-        <a href="#hero" className="flex min-w-0 items-center gap-2" onClick={() => setMobileOpen(false)}>
-          <span className="relative inline-flex">
-            <span className="absolute inset-0 rounded-full bg-brand-gold/25 blur-md" />
-            <img src={nrkLogo} alt="NRK Catering" className="relative h-9 w-auto drop-shadow-[0_0_10px_rgba(230,166,47,0.45)] sm:h-10" />
+        <a
+          href="#hero"
+          className="flex min-w-0 items-center gap-2"
+          onClick={() => setMobileOpen(false)}
+        >
+          <span className="relative flex shrink-0 items-center justify-center transition-all duration-500">
+            <img
+              src={nrkLogo}
+              alt="NRK Catering"
+              className="h-9 w-auto object-contain sm:h-10 lg:h-11"
+              style={{
+                filter:
+                  scrolled || mobileOpen
+                    ? "drop-shadow(0 3px 8px rgba(0,0,0,0.18))"
+                    : "drop-shadow(0 4px 14px rgba(0,0,0,0.38))",
+              }}
+            />
           </span>
-          <span className={`truncate font-heading text-base font-bold sm:text-lg ${scrolled || mobileOpen ? "text-brand-green-dark" : "text-brand-cream"}`}>
+
+          <span
+            className={`truncate font-heading text-base font-bold sm:text-lg ${
+              scrolled || mobileOpen
+                ? "text-brand-green-dark"
+                : "text-brand-cream drop-shadow-[0_2px_8px_rgba(0,0,0,0.75)]"
+            }`}
+          >
             NRK Catering
           </span>
         </a>

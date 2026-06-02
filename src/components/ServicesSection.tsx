@@ -6,15 +6,12 @@ import {
   ChevronLeft,
   ChevronRight,
   Crown,
-  Download,
-  ExternalLink,
-  FileText,
   Gem,
   Heart,
+  MessageCircle,
   PartyPopper,
   Sparkles,
   UsersRound,
-  X,
 } from "lucide-react";
 import familyEvents from "@/assets/family-events.jpg";
 import corporateImg from "@/assets/corporate-catering.jpg";
@@ -22,17 +19,16 @@ import socialEvents from "@/assets/private-events.jpg";
 import heroSadhya from "@/assets/hero-sadhya.jpg";
 import { buildWhatsAppLink } from "@/config/business";
 
-type MenuItem = {
+type ServiceItem = {
   title: string;
   subtitle: string;
   image: string;
   icon: typeof Heart;
   tone: string;
-  pdfUrl: string;
   highlights: string[];
 };
 
-const familyMenus: MenuItem[] = [
+const familyServices: ServiceItem[] = [
   {
     title: "Traditional Family Event",
     subtitle:
@@ -40,10 +36,9 @@ const familyMenus: MenuItem[] = [
     image: heroSadhya,
     icon: Heart,
     tone: "from-brand-green/85 to-brand-green-dark/75",
-    pdfUrl: "/menus/traditional-family-event-menu.pdf",
     highlights: [
       "Traditional banana leaf service",
-      "Pure vegetarian festive menu",
+      "Menu planned around guest preference",
       "Respectful guest-focused serving",
     ],
   },
@@ -54,16 +49,15 @@ const familyMenus: MenuItem[] = [
     image: familyEvents,
     icon: Crown,
     tone: "from-brand-gold/85 to-brand-terracotta/75",
-    pdfUrl: "/menus/luxury-family-event-menu.pdf",
     highlights: [
       "Elegant buffet presentation",
-      "Welcome drinks and dessert counters",
+      "Custom counters and festive add-ons",
       "Smooth guest-flow coordination",
     ],
   },
 ];
 
-const premiumEvents: MenuItem[] = [
+const premiumServices: ServiceItem[] = [
   {
     title: "Premium Corporate Catering",
     subtitle:
@@ -71,7 +65,6 @@ const premiumEvents: MenuItem[] = [
     image: corporateImg,
     icon: BriefcaseBusiness,
     tone: "from-brand-green-dark/90 to-brand-terracotta/75",
-    pdfUrl: "/menus/premium-corporate-catering-menu.pdf",
     highlights: [
       "Executive meal planning",
       "Buffet or packed meal service",
@@ -85,95 +78,17 @@ const premiumEvents: MenuItem[] = [
     image: socialEvents,
     icon: Gem,
     tone: "from-brand-terracotta/85 to-brand-peach/75",
-    pdfUrl: "/menus/premium-social-events-menu.pdf",
     highlights: [
       "Stylish food presentation",
-      "Custom celebration menus",
+      "Customized celebration menus",
       "Live counters and festive add-ons",
     ],
   },
 ];
 
-const mobileMenus = [...familyMenus, ...premiumEvents];
+const mobileServices = [...familyServices, ...premiumServices];
 
-function MenuPopup({
-  item,
-  onClose,
-}: {
-  item: MenuItem;
-  onClose: () => void;
-}) {
-  return (
-    <div
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-foreground/80 p-3 backdrop-blur-sm sm:p-5"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div className="relative flex h-[88svh] w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-background shadow-2xl">
-        <div className="flex flex-col gap-3 border-b border-border bg-card p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
-          <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-gold">
-              Menu PDF Preview
-            </p>
-            <h3 className="truncate font-heading text-xl font-bold text-foreground sm:text-2xl">
-              {item.title}
-            </h3>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <a
-              href={item.pdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-brand-green px-4 py-2 text-xs font-bold text-primary-foreground transition hover:bg-brand-green-dark"
-            >
-              <ExternalLink className="h-4 w-4" />
-              Open
-            </a>
-
-            <a
-              href={item.pdfUrl}
-              download
-              className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-bold text-foreground transition hover:bg-muted"
-            >
-              <Download className="h-4 w-4" />
-              PDF
-            </a>
-
-            <button
-              onClick={onClose}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-muted text-foreground transition hover:bg-brand-gold/20"
-              aria-label="Close menu preview"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
-
-        <div className="min-h-0 flex-1 bg-muted/40">
-          <iframe
-            title={`${item.title} PDF menu`}
-            src={item.pdfUrl}
-            className="h-full w-full"
-          />
-        </div>
-
-        <div className="border-t border-border bg-card px-4 py-3 text-xs text-muted-foreground sm:px-5">
-          Menu options can be customized based on guest count, event style,
-          location, and food preferences.
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function EventCard({
-  item,
-  onViewMenu,
-}: {
-  item: MenuItem;
-  onViewMenu: (item: MenuItem) => void;
-}) {
+function EventCard({ item }: { item: ServiceItem }) {
   const Icon = item.icon;
 
   return (
@@ -202,6 +117,8 @@ function EventCard({
       </div>
 
       <div className="p-5 sm:p-6">
+
+
         <ul className="space-y-3">
           {item.highlights.map((point) => (
             <li
@@ -214,26 +131,17 @@ function EventCard({
           ))}
         </ul>
 
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <button
-            onClick={() => onViewMenu(item)}
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-green px-5 py-3 text-sm font-bold text-primary-foreground transition hover:bg-brand-green-dark"
-          >
-            <FileText className="h-4 w-4" />
-            View Menu PDF
-          </button>
-
-          <a
-            href={buildWhatsAppLink(
-              `Hello NRK Catering, I want to enquire about ${item.title}.`
-            )}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-sm font-bold text-foreground transition hover:bg-muted"
-          >
-            Enquire
-          </a>
-        </div>
+        <a
+          href={buildWhatsAppLink(
+            `Hello NRK Catering, I want to enquire about ${item.title}. Please help me plan a customized menu based on my event details.`
+          )}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-green px-5 py-3 text-sm font-bold text-primary-foreground transition hover:bg-brand-green-dark"
+        >
+          <MessageCircle className="h-4 w-4" />
+          Enquire for Custom Menu
+        </a>
       </div>
     </article>
   );
@@ -243,28 +151,27 @@ export default function ServicesSection() {
   const ref = useScrollReveal();
   const { ref: progressRef, progress } = useScrollProgress();
   const lineWidth = Math.min(100, progress * 200);
-  const [selectedMenu, setSelectedMenu] = useState<MenuItem | null>(null);
-  const [activeMobileMenu, setActiveMobileMenu] = useState(0);
+  const [activeMobileService, setActiveMobileService] = useState(0);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setActiveMobileMenu((current) =>
-        current === mobileMenus.length - 1 ? 0 : current + 1
+      setActiveMobileService((current) =>
+        current === mobileServices.length - 1 ? 0 : current + 1
       );
     }, 3000);
 
     return () => window.clearInterval(timer);
   }, []);
 
-  const goToPreviousMenu = () => {
-    setActiveMobileMenu((current) =>
-      current === 0 ? mobileMenus.length - 1 : current - 1
+  const goToPreviousService = () => {
+    setActiveMobileService((current) =>
+      current === 0 ? mobileServices.length - 1 : current - 1
     );
   };
 
-  const goToNextMenu = () => {
-    setActiveMobileMenu((current) =>
-      current === mobileMenus.length - 1 ? 0 : current + 1
+  const goToNextService = () => {
+    setActiveMobileService((current) =>
+      current === mobileServices.length - 1 ? 0 : current + 1
     );
   };
 
@@ -294,11 +201,19 @@ export default function ServicesSection() {
           </h2>
 
           <p className="reveal-up mx-auto max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-            From traditional family gatherings to refined corporate hospitality
-            and elegant social celebrations, every service is planned with
-            thoughtful menus, graceful presentation, and warm Tamil hospitality.
+            Every event is unique. NRK Catering plans menus around your guest
+            count, event style, food preference, service format, and celebration
+            expectations instead of offering fixed menus.
           </p>
+
         </div>
+
+        <div className="mb-5 rounded-2xl border border-brand-gold/20 bg-brand-gold/10 p-4">
+                                        <p className="text-sm font-semibold leading-relaxed text-brand-green-dark">
+                                          Every menu is thoughtfully customized based on event type, guest
+                                          count, food preference, service style, and the memories you want to create.
+                                        </p>
+                                      </div>
 
         {/* Mobile carousel */}
         <div className="lg:hidden">
@@ -307,12 +222,12 @@ export default function ServicesSection() {
               <div
                 className="flex transition-transform duration-700 ease-out"
                 style={{
-                  transform: `translateX(-${activeMobileMenu * 100}%)`,
+                  transform: `translateX(-${activeMobileService * 100}%)`,
                 }}
               >
-                {mobileMenus.map((item) => (
+                {mobileServices.map((item) => (
                   <div key={item.title} className="w-full shrink-0 px-1">
-                    <EventCard item={item} onViewMenu={setSelectedMenu} />
+                    <EventCard item={item} />
                   </div>
                 ))}
               </div>
@@ -320,7 +235,7 @@ export default function ServicesSection() {
 
             <button
               type="button"
-              onClick={goToPreviousMenu}
+              onClick={goToPreviousService}
               className="absolute left-2 top-[42%] z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-lg ring-1 ring-border transition hover:bg-brand-gold hover:text-brand-green-dark"
               aria-label="Show previous service"
             >
@@ -329,7 +244,7 @@ export default function ServicesSection() {
 
             <button
               type="button"
-              onClick={goToNextMenu}
+              onClick={goToNextService}
               className="absolute right-2 top-[42%] z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-lg ring-1 ring-border transition hover:bg-brand-gold hover:text-brand-green-dark"
               aria-label="Show next service"
             >
@@ -337,13 +252,13 @@ export default function ServicesSection() {
             </button>
 
             <div className="mt-5 flex items-center justify-center gap-2">
-              {mobileMenus.map((item, index) => (
+              {mobileServices.map((item, index) => (
                 <button
                   key={item.title}
                   type="button"
-                  onClick={() => setActiveMobileMenu(index)}
+                  onClick={() => setActiveMobileService(index)}
                   className={`h-2 rounded-full transition-all ${
-                    activeMobileMenu === index
+                    activeMobileService === index
                       ? "w-8 bg-brand-gold"
                       : "w-2 bg-brand-gold/35"
                   }`}
@@ -354,7 +269,7 @@ export default function ServicesSection() {
           </div>
         </div>
 
-        {/* Desktop original layout */}
+        {/* Desktop layout */}
         <div className="hidden lg:block">
           <div className="mb-14 rounded-[2rem] border border-border/60 bg-background/80 p-4 shadow-sm backdrop-blur sm:p-6 md:p-8">
             <div className="mb-7 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
@@ -376,13 +291,10 @@ export default function ServicesSection() {
               </p>
             </div>
 
+
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              {familyMenus.map((item) => (
-                <EventCard
-                  key={item.title}
-                  item={item}
-                  onViewMenu={setSelectedMenu}
-                />
+              {familyServices.map((item) => (
+                <EventCard key={item.title} item={item} />
               ))}
             </div>
           </div>
@@ -405,7 +317,7 @@ export default function ServicesSection() {
                 </p>
               </div>
 
-              <EventCard item={premiumEvents[0]} onViewMenu={setSelectedMenu} />
+              <EventCard item={premiumServices[0]} />
             </div>
 
             <div className="rounded-[2rem] border border-border/60 bg-background/80 p-4 shadow-sm backdrop-blur sm:p-6 md:p-8">
@@ -425,15 +337,39 @@ export default function ServicesSection() {
                 </p>
               </div>
 
-              <EventCard item={premiumEvents[1]} onViewMenu={setSelectedMenu} />
+              <EventCard item={premiumServices[1]} />
             </div>
           </div>
         </div>
+       <div className="reveal-up mx-auto mt-14 max-w-4xl px-4">
+         <div className="relative overflow-hidden rounded-[2.2rem] border border-brand-gold/30 bg-gradient-to-br from-brand-green-dark via-brand-green to-brand-green-dark px-6 py-8 text-center shadow-[0_28px_80px_rgba(0,0,0,0.18)] sm:px-10 sm:py-10 md:px-14">
+           {/* soft luxury glow */}
+           <div className="pointer-events-none absolute -left-20 -top-20 h-48 w-48 rounded-full bg-brand-gold/20 blur-3xl" />
+           <div className="pointer-events-none absolute -right-24 bottom-0 h-56 w-56 rounded-full bg-brand-gold/10 blur-3xl" />
+
+           {/* subtle pattern lines */}
+           <div className="pointer-events-none absolute inset-x-10 top-5 h-px bg-gradient-to-r from-transparent via-brand-gold/50 to-transparent" />
+           <div className="pointer-events-none absolute inset-x-10 bottom-5 h-px bg-gradient-to-r from-transparent via-brand-gold/40 to-transparent" />
+
+           <div className="relative z-10 mx-auto max-w-3xl">
+             <span className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full border border-brand-gold/35 bg-white/10 font-heading text-4xl leading-none text-brand-gold shadow-inner">
+               “
+             </span>
+
+             <p className="font-heading text-xl font-semibold leading-relaxed text-brand-cream sm:text-2xl md:text-3xl">
+               Because at NRK, we don’t serve menus.
+             </p>
+
+             <p className="mt-3 bg-gradient-to-r from-brand-gold via-brand-peach to-brand-gold bg-clip-text font-heading text-2xl font-bold leading-tight text-transparent sm:text-3xl md:text-4xl">
+               We serve memories that last beyond the meal.
+             </p>
+
+             <div className="mx-auto mt-6 h-1 w-20 rounded-full bg-brand-gold/80" />
+           </div>
+         </div>
+       </div>
       </div>
 
-      {selectedMenu && (
-        <MenuPopup item={selectedMenu} onClose={() => setSelectedMenu(null)} />
-      )}
     </section>
   );
 }
