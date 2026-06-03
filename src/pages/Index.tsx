@@ -9,6 +9,7 @@ import WhyChooseUsSection from "@/components/WhyChooseUsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import OccasionsSection from "@/components/OccasionsSection";
 
 const Index = () => {
   return (
@@ -17,6 +18,7 @@ const Index = () => {
       <HeroSection />
       <AboutSection />
       <ServicesSection />
+      <OccasionsSection />
       <DiningPackagesSection />
       <GallerySection />
       <TestimonialsSection />

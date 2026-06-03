@@ -357,7 +357,7 @@ export default function ServicesSection() {
              </span>
 
              <p className="font-heading text-xl font-semibold leading-relaxed text-brand-cream sm:text-2xl md:text-3xl">
-               Because at NRK, we don’t serve menus.
+               At NRK, we don’t serve menus.
              </p>
 
              <p className="mt-3 bg-gradient-to-r from-brand-gold via-brand-peach to-brand-gold bg-clip-text font-heading text-2xl font-bold leading-tight text-transparent sm:text-3xl md:text-4xl">

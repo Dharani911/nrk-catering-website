@@ -132,9 +132,9 @@ export default function DiningPackagesSection() {
                 alt={image.alt}
                 className={`absolute inset-0 h-full w-full object-cover transition-all duration-1000 ${
                   index === activePrasadamImage
-                    ? "scale-100 opacity-100"
-                    : "scale-105 opacity-0"
-                } ${index === 0 ? "object-[center_42%]" : "object-center"}`}
+                    ? "scale-[1.16] opacity-100"
+                    : "scale-[1.20] opacity-0"
+                } ${index === 0 ? "object-[center_45%]" : "object-center"}`}
                 loading="lazy"
               />
             ))}
