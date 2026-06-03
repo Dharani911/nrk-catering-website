@@ -208,12 +208,7 @@ export default function ServicesSection() {
 
         </div>
 
-        <div className="mb-5 rounded-2xl border border-brand-gold/20 bg-brand-gold/10 p-4">
-                                        <p className="text-sm font-semibold leading-relaxed text-brand-green-dark">
-                                          Every menu is thoughtfully customized based on event type, guest
-                                          count, food preference, service style, and the memories you want to create.
-                                        </p>
-                                      </div>
+
 
         {/* Mobile carousel */}
         <div className="lg:hidden">

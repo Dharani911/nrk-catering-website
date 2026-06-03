@@ -119,7 +119,7 @@ export default function OccasionsSection() {
           </p>
 
           <h2 className="reveal-up mb-4 font-heading text-3xl font-bold leading-tight text-foreground sm:text-4xl lg:text-5xl">
-            Popular Celebrations We Serve —{" "}
+            Popular Celebrations We Cater to{" "}
             <span className="text-gradient-gold">And Many More</span>
           </h2>
 

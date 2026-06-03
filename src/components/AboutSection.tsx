@@ -1,18 +1,38 @@
 import { useScrollReveal, useParallax, useCountUp } from "@/hooks/useScrollReveal";
 import heroSadhya from "@/assets/hero-sadhya.jpg";
 
-function StatCounter({ target, suffix, label }: { target: number; suffix: string; label: string }) {
+function StatCounter({
+  target,
+  suffix,
+  label,
+}: {
+  target: number;
+  suffix: string;
+  label: string;
+}) {
   const { ref, count } = useCountUp(target, 2000);
+
   return (
-    <div ref={ref} className="text-center">
-      <div className="font-heading text-2xl md:text-3xl font-bold text-brand-green">
-        {count}{suffix}
+    <div
+      ref={ref}
+      className="group relative overflow-hidden rounded-[1rem] border border-brand-gold/25 bg-[#fffaf0]/85 px-2 py-3 text-center shadow-[0_10px_28px_rgba(66,53,27,0.08)] transition duration-500 hover:-translate-y-0.5 hover:border-brand-gold/45 sm:rounded-[1.35rem] sm:px-4 sm:py-5"
+    >
+      <div className="pointer-events-none absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/80 to-transparent" />
+      <div className="pointer-events-none absolute -right-8 -top-8 h-16 w-16 rounded-full bg-brand-gold/12 blur-2xl sm:h-20 sm:w-20" />
+
+      <div className="relative z-10 font-heading text-[2rem] font-black leading-none tracking-tight text-brand-green-dark drop-shadow-[0_1px_0_rgba(255,255,255,0.55)] sm:text-5xl lg:text-[3.35rem]">
+        {count}
+        <span className="ml-0.5 sm:ml-1">{suffix}</span>
       </div>
-      <div className="text-xs text-muted-foreground mt-1">{label}</div>
+
+      <div className="relative z-10 mx-auto mt-1.5 h-[2px] w-6 rounded-full bg-brand-gold/80 transition-all duration-500 group-hover:w-10 sm:mt-2 sm:w-8 sm:group-hover:w-12" />
+
+      <div className="relative z-10 mt-1.5 text-[8px] font-extrabold uppercase leading-snug tracking-[0.1em] text-brand-green-dark/85 sm:mt-2 sm:text-[11px] md:text-xs">
+        {label}
+      </div>
     </div>
   );
 }
-
 export default function AboutSection() {
   const ref = useScrollReveal();
   const imageParallax = useParallax(-0.15);
@@ -50,7 +70,7 @@ export default function AboutSection() {
               Our Story
             </p>
             <h2 className="reveal-up font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-              Two Generations,{" "}
+              Three Generations,{" "}
               <span className="text-gradient-gold">One Passion</span>
             </h2>
             <div className="space-y-4 text-muted-foreground leading-relaxed">
@@ -81,7 +101,7 @@ export default function AboutSection() {
             </div>
 
             {/* Animated stats */}
-            <div className="reveal-up grid grid-cols-3 gap-6 mt-10">
+            <div className="reveal-up mx-auto mt-8 grid max-w-full grid-cols-3 gap-2 rounded-[1.4rem] border border-brand-gold/25 bg-gradient-to-br from-brand-gold/10 via-[#fffdf4] to-brand-green/5 p-2 shadow-[0_18px_45px_rgba(66,53,27,0.10)] sm:mt-10 sm:max-w-4xl sm:gap-3 sm:rounded-[1.8rem] sm:p-4">
               <StatCounter target={40} suffix="+" label="Years Experience" />
               <StatCounter target={800} suffix="+" label="Events Served" />
               <StatCounter target={100} suffix="%" label="Client Satisfaction" />

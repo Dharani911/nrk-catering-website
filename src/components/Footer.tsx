@@ -1,3 +1,5 @@
+import { useState } from "react";
+import PrivacyPolicyModal from "@/components/PrivacyPolicyModal";
 import nrkLogo from "@/assets/nrk-logo.png";
 import { Instagram, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { business, buildWhatsAppLink } from "@/config/business";
@@ -11,9 +13,10 @@ const quickLinks = [
   { label: "Contact", href: "#contact" },
 ];
 
-const services = ["Family Events", "Corporate Catering", "Social Events", "Banana Leaf Dining", "Bulk Orders"];
+const services = ["Family Events", "Corporate Catering", "Social Events"];
 
 export default function Footer() {
+const [privacyOpen, setPrivacyOpen] = useState(false);
   return (
     <footer className="bg-foreground py-14 sm:py-16">
       <div className="container mx-auto px-4">
@@ -21,8 +24,12 @@ export default function Footer() {
           <div>
             <div className="mb-4 flex items-center gap-2">
               <span className="relative inline-flex">
-                <span className="absolute inset-0 rounded-full bg-brand-gold/25 blur-md" />
-                <img src={nrkLogo} alt="NRK Catering" className="relative h-10 w-auto drop-shadow-[0_0_10px_rgba(230,166,47,0.45)]" />
+                <span className="absolute inset-0 rounded-full " />
+                <img
+                  src={nrkLogo}
+                  alt="NRK Catering"
+                  className="h-12 w-auto object-contain brightness-110 drop-shadow-[0_6px_16px_rgba(0,0,0,0.35)] sm:h-14 lg:h-16"
+                />
               </span>
               <span className="font-heading text-lg font-bold text-brand-cream">{business.name}</span>
             </div>
@@ -97,7 +104,13 @@ export default function Footer() {
             <p className="text-xs text-brand-cream/50">
               © {new Date().getFullYear()} {business.name}. All rights reserved.
             </p>
-
+<button
+  type="button"
+  onClick={() => setPrivacyOpen(true)}
+  className="text-sm text-brand-cream/70 transition hover:text-brand-gold"
+>
+  Privacy Policy
+</button>
             <div className="flex flex-col items-center gap-1 md:items-end">
               <p className="text-xs text-brand-cream/50">
                 Traditional taste, premium service, and memorable catering for every celebration.
@@ -118,6 +131,10 @@ export default function Footer() {
           </div>
         </div>
       </div>
+      <PrivacyPolicyModal
+        open={privacyOpen}
+        onClose={() => setPrivacyOpen(false)}
+      />
     </footer>
   );
 }
